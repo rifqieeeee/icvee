@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="ICVEE Letter of Acceptance verification page" />
+  <link href="logo icvee.png" rel="icon">
   <title>ICVEE 2026 — LOA Verification</title>
   <style>
     :root {
@@ -265,7 +266,7 @@
       setMessage('Checking manuscript data...');
 
       try {
-        const response = await fetch(`/icvee-loa/data.csv?v=${Date.now()}`, { cache: 'no-store' });
+        const response = await fetch(`data.csv?v=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error('Unable to load data.csv');
 
         const records = parseCSV(await response.text());
@@ -284,7 +285,7 @@
         }
 
         setMessage('Manuscript verified. Opening the LOA...', 'success');
-        window.location.href = `/icvee-loa/loa.html?id=${encodeURIComponent(manuscriptId)}`;
+        window.location.href = `loa.html?id=${encodeURIComponent(manuscriptId)}`;
       } catch (error) {
         console.error(error);
         setMessage('The manuscript database could not be loaded. Please try again.', 'error');
