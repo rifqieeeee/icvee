@@ -45,7 +45,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      background: #fff url("bg.jpeg") center center / 100% 100% no-repeat;
+      background: #fff url("bg.png") center center / 100% 100% no-repeat;
       box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
     }
 
@@ -129,7 +129,7 @@
       height: 38mm;
       object-fit: contain;
       object-position: left center;
-      transform: translateX(-10mm);
+      transform: translateX(-25mm);
     }
 
     .signature-placeholder {
@@ -416,7 +416,19 @@
           return;
         }
 
-        setText('letterDate', record.letter_date);
+        // setText('letterDate', record.letter_date);
+        const today = new Date();
+
+        const months = [
+          "January","February","March","April","May","June",
+          "July","August","September","October","November","December"
+        ];
+
+        const formattedDate =
+          `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+
+        setText("letterDate", formattedDate);
+
         setText('authors', record.authors);
         setText('manuscriptId', record.manuscript_id);
         setText('manuscriptTitle', record.title);
