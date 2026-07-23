@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
-  <link href="/jeisbi-loa/logo-jeisbi.png" rel="icon">
-  <title>Letter of Acceptance - JEISBI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <link href="/icvee-loa/logo icvee.png" rel="icon">
+  <title>Letter of Acceptance - ICVEE 2026</title>
 
   <style>
     :root {
       --page-width: 210mm;
       --page-height: 297mm;
-      --page-padding-x: 15mm;
-      --blue: #4169a8;
-      --text: #292929;
-      --content-font-size: 10.5pt;
-      --content-line-height: 1.35;
+      --page-padding-top: 16mm;
+      --page-padding-right: 18mm;
+      --page-padding-left: 18mm;
+      --primary-blue: #233f84;
+      --secondary-blue: #3f63a7;
+      --light-blue: #eef3fb;
+      --text-color: #222222;
+      --muted-color: #666666;
+      --border-color: #b9c4d8;
     }
 
     * { box-sizing: border-box; }
@@ -23,9 +27,9 @@
     html, body {
       margin: 0;
       padding: 0;
-      color: var(--text);
+      color: var(--text-color);
       background: #e9edf3;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "Times New Roman", Times, serif;
     }
 
     body { padding: 24px; }
@@ -35,172 +39,211 @@
       width: var(--page-width);
       min-height: var(--page-height);
       margin: 0 auto;
-      padding: 15mm var(--page-padding-x) 25mm;
+      padding: var(--page-padding-top) var(--page-padding-right) 10mm var(--page-padding-left);
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
       background: #fff;
-      box-shadow: 0 10px 34px rgba(0, 0, 0, .14);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
     }
 
-    .page-content {
-      position: relative;
-      z-index: 2;
-    }
-
-    .watermark {
+    .top-accent {
       position: absolute;
-      top: 53%;
+      top: 0;
+      left: 0;
+      z-index: 3;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary-blue) 0 72%, var(--secondary-blue) 72% 100%);
+    }
+
+    .corner-shape {
+      position: absolute;
+      top: 8px;
+      right: 0;
+      z-index: 0;
+      width: 72mm;
+      height: 18mm;
+      background: var(--light-blue);
+      clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .page-watermark {
+      position: absolute;
+      top: 54%;
       left: 50%;
       z-index: 1;
-      width: 117mm;
-      height: 117mm;
+      width: 135mm;
+      height: 135mm;
       transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       pointer-events: none;
       user-select: none;
     }
 
-    .watermark img {
+    .page-watermark img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      opacity: .15;
+      opacity: 0.10;
+      /* filter: grayscale(100%) contrast(85%); */
       filter: none;
+      mix-blend-mode: multiply;
+    }
+
+    .header,
+    .divider,
+    .date,
+    .subject-line,
+    .body-text,
+    .signature-section,
+    .footer {
+      position: relative;
+      z-index: 2;
     }
 
     .header {
       display: grid;
-      grid-template-columns: 1.07fr .93fr;
-      align-items: start;
-      gap: 10mm;
+      grid-template-columns: 31mm 1fr 31mm;
+      align-items: center;
+      column-gap: 8mm;
+      padding-top: 2mm;
     }
 
-    .title-side {
-      display: flex;
-      align-items: flex-start;
-      gap: 4mm;
-    }
-
-    .logo {
-      width: 18mm;
-      height: 18mm;
+    .logo-image {
+      width: 29mm;
+      height: 29mm;
       object-fit: contain;
-      flex: 0 0 auto;
     }
 
-    .loa-title {
-      margin: -1mm 0 0;
-      color: var(--blue);
-      font-size: 24pt;
+    .logo-right { justify-self: end; }
+    .conference-block { text-align: center; }
+
+    .conference-title {
+      margin: 0;
+      color: var(--primary-blue);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
       font-weight: 800;
-      line-height: .98;
-      letter-spacing: .1px;
+      line-height: 1.22;
+      letter-spacing: 0.35px;
+      text-transform: uppercase;
     }
 
-    .journal-side {
-      padding-top: 1mm;
-      font-size: 9.5pt;
-      line-height: 1.4;
-      text-align: right;
-    }
-
-    .journal-name { font-weight: 700; }
-
-    .contact {
-      margin-top: 2mm;
-      font-size: 9pt;
-      font-style: italic;
+    .conference-meta {
+      margin-top: 7px;
+      color: #333;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10.5px;
+      line-height: 1.45;
     }
 
     .divider {
-      height: 1.2px;
-      margin: 5mm 0;
-      background: #313131;
+      height: 1.4px;
+      margin: 8mm 0 6mm;
+      background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue), transparent);
     }
 
-    .meta {
-      font-size: var(--content-font-size);
-      line-height: var(--content-line-height);
+    .date {
+      margin-bottom: 6mm;
+      font-size: 12pt;
+      text-align: right;
     }
 
-    .meta-row {
-      text-align: justify;
-      margin: 0;
-      font-size: inherit;
-      line-height: inherit;
-    }
-
-    .meta-label { font-weight: 700; }
-
-    .body {
-      margin-top: 7mm;
-      font-size: var(--content-font-size);
-      line-height: var(--content-line-height);
+    .subject-line {
+      margin: 0 0 6mm;
+      font-size: 12pt;
       text-align: justify;
     }
 
-    .body p {
-      margin: 0;
-      font-size: inherit;
-      line-height: inherit;
-    }
-    .body strong { font-weight: 800; }
-
-    .instruction-title {
-      margin-top: 1mm !important;
-      font-weight: 800;
+    .subject-line strong {
+      display: inline-block;
+      min-width: 22mm;
     }
 
-    ol {
-      margin: .5mm 0 0 7mm;
-      padding-left: 4.3mm;
-      font-size: inherit;
-      line-height: inherit;
+    .body-text {
+      font-size: 12pt;
+      text-align: justify;
     }
 
-    li {
-      margin: 0 0 .7mm;
-      padding-left: .6mm;
-      font-size: inherit;
-      line-height: inherit;
+    .body-text p { margin: 0 0 4.5mm; }
+
+    .manuscript-box {
+      width: 100%;
+      margin: 5mm 0 6mm;
+      border-collapse: collapse;
+      font-size: 12pt;
     }
 
-    a {
-      color: #2365c4;
+    .manuscript-box td {
+      padding: 1.2mm 0;
+      vertical-align: top;
+    }
+
+    .manuscript-box td:first-child {
+      width: 33mm;
       font-weight: 700;
-      text-decoration: underline;
     }
 
-    .closing { margin-top: 1mm !important; }
+    .manuscript-box td:nth-child(2) {
+      width: 5mm;
+      text-align: center;
+    }
 
-    .signature-block {
-      width: 60mm;
-      margin-top: 4mm;
-      font-size: var(--content-font-size);
-      line-height: var(--content-line-height);
+    .signature-section {
+      width: 73mm;
+      margin: 7mm 0 8mm auto;
+      font-size: 12pt;
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    .signature-space {
+      height: 24mm;
+      display: flex;
+      align-items: center;
     }
 
     .signature-image {
-      display: block;
-      width: 30mm;
-      max-height: 22mm;
+      width: 42mm;
+      height: 20mm;
       object-fit: contain;
       object-position: left center;
     }
 
-    .editor-name { margin-top: 1mm; }
+    .signature-placeholder {
+      width: 42mm;
+      height: 18mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #aab3c2;
+      border-radius: 4px;
+      color: #8a94a3;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+    }
+
+    .signer-name {
+      font-weight: 700;
+      text-decoration: underline;
+    }
 
     .footer {
-      position: absolute;
-      right: var(--page-padding-x);
-      bottom: 10mm;
-      left: var(--page-padding-x);
-      z-index: 2;
-      padding-top: 3mm;
-      border-top: 1px solid #999;
-      color: #555;
-      font-size: 8.8pt;
+      width: 100%;
+      margin-top: auto;
+      padding: 3mm 0 1mm;
+      border-top: 1px solid var(--border-color);
+      color: var(--muted-color);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
       line-height: 1.4;
       text-align: center;
     }
+
+    .footer strong { color: var(--primary-blue); }
 
     .loading,
     .error-panel {
@@ -209,274 +252,141 @@
       padding: 30px;
       border-radius: 16px;
       background: #fff;
-      box-shadow: 0 16px 40px rgba(65, 105, 168, .15);
+      box-shadow: 0 16px 40px rgba(35, 63, 132, 0.15);
+      font-family: Arial, Helvetica, sans-serif;
       text-align: center;
     }
 
-    .loading {
-      color: var(--blue);
-      font-weight: 700;
-    }
-
-    .error-panel h1 {
-      margin-top: 0;
-      color: #b42318;
-    }
-
-    .error-panel a { color: var(--blue); }
+    .error-panel h1 { color: #b42318; }
+    .error-panel a { color: var(--primary-blue); font-weight: 700; }
     .hidden { display: none !important; }
 
     @media screen and (max-width: 900px) {
-      body {
-        padding: 0;
-        background: #fff;
-      }
-
-      .page {
-        width: 100%;
-        min-height: 100vh;
-        padding: 24px 24px 110px;
-        box-shadow: none;
-      }
-
-      .header {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-
-      .journal-side { text-align: left; }
-      .loa-title { font-size: 28px; }
-      .logo { width: 58px; height: 58px; }
-
-      .meta,
-      .body,
-      .signature-block,
-      .letter-meta {
-        font-size: 14px;
-        line-height: 1.48;
-      }
-      .footer { bottom: 24px; }
+      body { padding: 0; background: #fff; }
+      .page { width: 100%; min-height: auto; box-shadow: none; }
     }
 
     @media print {
       @page { size: A4 portrait; margin: 0; }
-
-      html, body {
-        width: 210mm;
-        height: 297mm;
-        background: #fff;
-      }
-
+      html, body { width: 210mm; height: 297mm; background: #fff; }
       body { padding: 0; }
-
       .page {
         width: 210mm;
         min-height: 297mm;
         margin: 0;
         box-shadow: none;
+        page-break-after: avoid;
       }
-
-      .loading,
-      .error-panel {
-        display: none !important;
-      }
-    }
-
-    .letter-meta{
-        text-align:right;
-        margin-bottom:3mm;
-        font-size:var(--content-font-size);
-        font-weight:700;
-    }
-
-    .letter-number{
-        display:inline-block;
-        border:none;
-        padding:0;
-        font-weight:700;
-        color:var(--blue);
-    }
-
-    .signature-date {
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
-      text-align: left;
-    }
-
-    .qr-section {
-      position: absolute;
-      right: 15mm;
-      bottom: 25mm;
-      width: 34mm;
-      text-align: center;
-    }
-
-    .qr-code {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .qr-code img,
-    .qr-code canvas {
-      display: block;
-      width: 27mm !important;
-      height: 27mm !important;
-    }
-
-    .qr-label {
-      margin-top: 1.5mm;
-      color: #555;
-      font-size: 7.5pt;
-      line-height: 1.2;
-    }
-
-    @media print {
-      .qr-section {
-        right: 15mm;
-        bottom: 25mm;
-      }
+      .loading, .error-panel { display: none !important; }
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-  <div id="loading" class="loading">Loading and verifying acceptance data...</div>
+  <div id="loading" class="loading">Loading and verifying manuscript data...</div>
 
   <div id="errorPanel" class="error-panel hidden">
     <h1>LOA Not Available</h1>
-    <p id="errorMessage">The requested article could not be verified.</p>
+    <p id="errorMessage">The requested manuscript could not be verified.</p>
     <a href="index.html">Return to verification page</a>
   </div>
 
   <main id="loaPage" class="page hidden">
-    <div class="watermark" aria-hidden="true">
-      <img src="jeisbi.png" alt="">
+    <div class="page-watermark">
+      <img src="icvee.png" alt="" onerror="this.style.display='none'" />
     </div>
 
-    <div class="page-content">
-      <header class="header">
-        <div class="title-side">
-          <img
-            class="logo"
-            src="jeisbi.png"
-            alt="JEISBI Logo"
-            onerror="this.style.visibility='hidden'"
-          >
-          <h1 class="loa-title">Letter of<br>Acceptance</h1>
+    <div class="top-accent"></div>
+    <div class="corner-shape"></div>
+
+    <header class="header">
+      <div>
+        <img class="logo-image" src="icvee.png" alt="ICVEE Logo" onerror="this.style.visibility='hidden'" />
+      </div>
+
+      <div class="conference-block">
+        <h1 id="eventName" class="conference-title">ICVEE 2026</h1>
+        <div class="conference-meta">
+          Faculty of Medicine Building, State University of Surabaya,<br />
+          Surabaya, Indonesia<br />
+          <strong id="eventDate"></strong>
         </div>
+      </div>
 
-        <div class="journal-side">
-          <div class="journal-name">
-            Journal of Emerging Information Systems and<br>
-            Business Intelligence (JEISBI)
-          </div>
-          <div class="contact">
-            Phone: +6231-8280009 | Email: jeisbi@unesa.ac.id
-          </div>
-        </div>
-      </header>
+      <div class="logo-right">
+        <img class="logo-image" src="unesa.jpg" alt="UNESA Logo" onerror="this.style.visibility='hidden'" />
+      </div>
+    </header>
 
-      <div class="divider"></div>
+    <div class="divider"></div>
 
-      <section class="meta">
-        <div class="letter-meta">
-          <span class="letter-number">
-            <span id="letterNumber"></span>
-          </span>
-        </div>
+    <section id="letterDate" class="date"></section>
 
-        <p class="meta-row"><span class="meta-label">Letter to:</span></p>
-        <p id="authors" class="meta-row"></p>
+    <section class="subject-line">
+      <strong>To:</strong><br />
+      <span id="authors"></span>
+    </section>
 
-        <p class="meta-row" style="margin-top: 2mm;">
-          <span class="meta-label">Article Title:</span>
-        </p>
-        <p id="articleTitle" class="meta-row"></p>
-      </section>
+    <section class="body-text">
+      <p>To whom it may concern,</p>
 
-      <section class="body">
-        <p>Dear Authors,</p>
+      <p>We are pleased to inform you that your manuscript with the following details:</p>
 
-        <p>
-          We are pleased to inform you that, following the editorial review process,
-          your manuscript has been <strong>ACCEPTED</strong> for publication in the
-          <strong>
-            Journal of Emerging Information Systems and Business Intelligence
-            (JEISBI), <span id="publicationDetails"></span>.
-          </strong>
-          Further updates regarding your submission will be shared through the
-          Open Journal System (OJS) to your registered email address. Kindly ensure
-          that you frequently check your email and OJS account for notifications.
-        </p>
+      <table class="manuscript-box" aria-label="Manuscript details">
+        <tr>
+          <td>Manuscript ID</td>
+          <td>:</td>
+          <td id="manuscriptId"></td>
+        </tr>
+        <tr>
+          <td>Title</td>
+          <td>:</td>
+          <td id="manuscriptTitle"></td>
+        </tr>
+      </table>
 
-        <p class="instruction-title">IMPORTANT INSTRUCTIONS FOR AUTHORS:</p>
+      <p>
+        has been accepted for presentation at the <span id="eventNameBody"></span>
+        and will be included in the IEEE Xplore Digital Library proceedings,
+        subject to meeting the IEEE guidelines. Authors of the manuscript are
+        invited to present their work on <span id="eventDateBody"></span> at
+        <span id="location"></span>, or online.
+      </p>
 
-        <ol>
-          <li>
-            Please upload the final version of your manuscript within
-            <strong>21 days</strong> from the date of this letter to ensure inclusion
-            in the publication schedule. Failure to do so may result in
-            <strong>cancellation.</strong>
-          </li>
-          <li>
-            Authors may revise their manuscript as needed based on feedback; however,
-            once the copyright form is signed and the final document is uploaded,
-            no further revisions will be permitted.
-          </li>
-          <li>
-            The editorial team reserves the right to make necessary edits to improve
-            the quality of your article and align it with journal standards.
-            All substantive changes will be communicated to the author for approval.
-          </li>
-          <li>
-            Ensure that the revised manuscript fully addresses the reviewers'
-            comments. Include a response letter outlining how each suggestion
-            was incorporated.
-          </li>
-          <li>
-            The journal will finalize formatting details, including the header and
-            footer, based on its standard template.
-          </li>
-          <li>
-            Once the copyright agreement is submitted, withdrawal of the manuscript
-            will no longer be possible.
-          </li>
-          <li>
-            For additional assistance, contact us via email at
-            <a href="mailto:jeisbi@unesa.ac.id">jeisbi@unesa.ac.id</a>.
-          </li>
-        </ol>
+      <p>
+        Please be advised that we adopt the IEEE no-show policy for non-presented papers.
+        IEEE reserves the right to exclude a paper from distribution after the conference,
+        including the IEEE Xplore Digital Library, if the paper is not presented by the author
+        at the conference.
+      </p>
 
-        <p class="closing">
-          We look forward to your cooperation in completing the final steps for publication.
-        </p><br>
-        <p class="signature-date"><span id="letterDate"></span></p>
-        <p>Sincerely,</p>
-      </section>
+      <p>
+        We remind you to check the latest information on our website at
+        <strong>https://icvee.conference.unesa.ac.id/</strong>, and to stay in touch
+        with the committee via email at <strong>icvee@unesa.ac.id</strong>.
+      </p>
 
-      <section class="signature-block">
+      <p>
+        Thank you again for participating in ICVEE 2026. We look forward to welcoming you to the event.
+      </p>
+    </section>
+
+    <section class="signature-section">
+      <div>Yours sincerely,</div>
+      <div class="signature-space">
         <img
           class="signature-image"
-          src="monica.png"
-          alt="Signature of Monica Cinthya"
-          onerror="this.style.display='none'"
-        >
-        <div class="editor-name">Monica Cinthya</div>
-        <div>JEISBI Chief Editor</div>
-      </section>
-    </div>
-
-    <div class="qr-section">
-        <div id="qrCode" class="qr-code"></div>
-        <div class="qr-label">
-          Scan to verify this<br>Letter of Acceptance
-        </div>
-    </div>
+          src="TTD Rifqi.png"
+          alt="Signature"
+          onerror="this.outerHTML='<div class=&quot;signature-placeholder&quot;>SIGNATURE</div>'"
+        />
+      </div>
+      <div id="chairName" class="signer-name"></div>
+      <div id="chairTitle"></div>
+    </section>
 
     <footer class="footer">
-      <strong>Journal of Emerging Information Systems and Business Intelligence</strong><br>
-      <i><small><a href="https://ejournal.unesa.ac.id/index.php/JEISBI">https://ejournal.unesa.ac.id/index.php/JEISBI</a></small></i>
+      <strong>2026 Ninth International Conference on Vocational Education and Electrical Engineering</strong><br />
+      State University of Surabaya · Surabaya, Indonesia
     </footer>
   </main>
 
@@ -506,10 +416,8 @@
           field = '';
         } else if ((char === '\n' || char === '\r') && !insideQuotes) {
           if (char === '\r' && next === '\n') i += 1;
-
           row.push(field.trim());
           field = '';
-
           if (row.some(value => value !== '')) rows.push(row);
           row = [];
         } else {
@@ -521,10 +429,7 @@
       if (row.some(value => value !== '')) rows.push(row);
       if (rows.length < 2) return [];
 
-      const headers = rows[0].map(header =>
-        header.replace(/^\uFEFF/, '').trim()
-      );
-
+      const headers = rows[0].map(header => header.replace(/^\uFEFF/, '').trim());
       return rows.slice(1).map(values =>
         headers.reduce((record, header, index) => {
           record[header] = values[index] ?? '';
@@ -534,75 +439,7 @@
     }
 
     function setText(id, value) {
-      const element = document.getElementById(id);
-      if (element) element.textContent = value || '';
-    }
-
-    function normalize(value) {
-      return String(value || '').trim().toLowerCase();
-    }
-
-    function getCurrentLetterDate() {
-      return new Intl.DateTimeFormat('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      }).format(new Date());
-    }
-
-    function formatLetterNumber(record) {
-      const sequence = String(record.no_article || '').trim();
-      const volume = String(record.volume || '').trim();
-      const issue = String(record.issue || '').trim();
-      const year = String(record.year || '').trim();
-
-      if (!sequence || !volume || !issue || !year) return '';
-
-      return `${sequence.padStart(3, '0')}/JEISBI.${volume}.${issue}/LOA/${year}`;
-    }
-
-    function formatPublicationDetails(record) {
-      const volume = String(record.volume || '').trim();
-      const issue = String(record.issue || '').trim();
-      const year = String(record.year || '').trim();
-
-      return `Vol. ${volume}, Issue ${issue}, ${year}`;
-    }
-
-    function generateQRCode(articleId) {
-      const qrContainer = document.getElementById('qrCode');
-
-      if (!qrContainer || typeof QRCode === 'undefined') {
-        console.error('QR Code library could not be loaded.');
-        return;
-      }
-
-      qrContainer.innerHTML = '';
-
-      const verificationUrl =
-        `https://rifqi-data-share.vercel.app/jeisbi-loa/loa.html?id=${encodeURIComponent(articleId)}`;
-
-      new QRCode(qrContainer, {
-        text: verificationUrl,
-        width: 180,
-        height: 180,
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    }
-
-    function validateRecord(record) {
-      const requiredFields = [
-        'article_id',
-        'authors',
-        'article_title',
-        'volume',
-        'issue',
-        'no_article',
-        'year',
-        'status'
-      ];
-
-      return requiredFields.every(field => String(record[field] || '').trim());
+      document.getElementById(id).textContent = value || '';
     }
 
     function showError(message) {
@@ -613,62 +450,50 @@
     }
 
     async function loadLOA() {
-      const articleId =
-        new URLSearchParams(window.location.search).get('id')?.trim();
-
-      if (!articleId) {
-        showError('No Article ID was provided.');
+      const manuscriptId = new URLSearchParams(window.location.search).get('id')?.trim();
+      if (!manuscriptId) {
+        showError('No Manuscript ID was provided.');
         return;
       }
 
       try {
-        const csvUrl = new URL('data.csv', window.location.href);
-        csvUrl.searchParams.set('v', Date.now());
-
-        const response = await fetch(csvUrl, { cache: 'no-store' });
-
-        if (!response.ok) {
-          throw new Error(`Unable to load data.csv (${response.status}).`);
-        }
+        const response = await fetch(`data.csv?v=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Unable to load data.csv');
 
         const records = parseCSV(await response.text());
         const record = records.find(item =>
-          normalize(item.article_id) === normalize(articleId)
+          String(item.manuscript_id || '').trim().toLowerCase() === manuscriptId.toLowerCase()
         );
 
         if (!record) {
-          showError('The Article ID was not found in the JEISBI database.');
+          showError('The Manuscript ID was not found in the conference database.');
           return;
         }
 
-        if (normalize(record.status) !== 'accepted') {
-          showError('This article is not currently marked as accepted.');
+        if (String(record.status || '').trim().toLowerCase() !== 'accepted') {
+          showError('This manuscript is not currently marked as accepted.');
           return;
         }
 
-        if (!validateRecord(record)) {
-          showError('The article record is incomplete. Please contact the JEISBI editorial team.');
-          return;
-        }
-
-        setText('letterDate', getCurrentLetterDate());
-        setText('letterNumber', formatLetterNumber(record));
+        setText('eventName', record.event_name);
+        setText('eventDate', record.event_date);
+        setText('letterDate', record.letter_date);
         setText('authors', record.authors);
-        setText('articleTitle', record.article_title);
-        setText('publicationDetails', formatPublicationDetails(record));
+        setText('manuscriptId', record.manuscript_id);
+        setText('manuscriptTitle', record.title);
+        setText('eventNameBody', record.event_name);
+        setText('eventDateBody', record.event_date);
+        setText('location', record.location);
+        setText('chairName', record.chair_name);
+        setText('chairTitle', record.chair_title);
 
-        generateQRCode(record.article_id);
-
-        document.title = `LOA ${record.article_id} - JEISBI`;
-
+        document.title = `LOA ${record.manuscript_id} - ICVEE 2026`;
         loading.classList.add('hidden');
         errorPanel.classList.add('hidden');
         loaPage.classList.remove('hidden');
       } catch (error) {
         console.error(error);
-        showError(
-          'The acceptance database could not be loaded. Please return and try again.'
-        );
+        showError('The manuscript database could not be loaded. Please return and try again.');
       }
     }
 

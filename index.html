@@ -1,245 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
-  <link href="/jeisbi-loa/logo-jeisbi.png" rel="icon">
-  <title>JEISBI LOA Verification</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ICVEE Letter of Acceptance verification page" />
+  <title>ICVEE 2026 — LOA Verification</title>
   <style>
     :root {
-      --blue: #4169a8;
-      --blue-dark: #2f4f82;
-      --yellow: #f5b84b;
-      --text: #252525;
-      --muted: #6b7280;
-      --border: #d7deea;
+      --primary: #233f84;
+      --secondary: #3f63a7;
       --surface: #ffffff;
-      --background: #eef2f7;
+      --background: #eef3fb;
+      --text: #1f2937;
+      --muted: #667085;
+      --border: #d8e0ef;
+      --danger: #b42318;
+      --success: #067647;
     }
 
     * { box-sizing: border-box; }
 
-    html, body {
-      min-height: 100%;
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(65, 105, 168, .16), transparent 34rem),
-        linear-gradient(135deg, #f7f9fc, var(--background));
-    }
+    html, body { min-height: 100%; }
 
     body {
+      margin: 0;
+      padding: 24px;
       display: grid;
       place-items: center;
-      padding: 24px;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(63, 99, 167, 0.18), transparent 32%),
+        linear-gradient(135deg, #f8faff 0%, var(--background) 100%);
     }
 
     .card {
-      width: min(100%, 520px);
-      overflow: hidden;
-      border: 1px solid rgba(65, 105, 168, .12);
+      width: min(100%, 560px);
+      padding: 40px;
+      border: 1px solid rgba(35, 63, 132, 0.14);
       border-radius: 22px;
-      background: var(--surface);
-      box-shadow: 0 22px 70px rgba(35, 60, 105, .16);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 20px 55px rgba(35, 63, 132, 0.15);
     }
-
-    .top-bar {
-      height: 8px;
-      background: linear-gradient(90deg, var(--blue), var(--yellow));
-    }
-
-    .content { padding: 38px 38px 34px; }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 28px;
     }
 
-    .brand img {
-      width: 68px;
-      height: 68px;
-      object-fit: contain;
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
     }
 
-    .brand-copy h1 {
+    .brand-name {
       margin: 0;
-      color: var(--blue);
-      font-size: 25px;
-      line-height: 1.1;
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.35;
+      text-transform: uppercase;
     }
 
-    .brand-copy p {
-      margin: 6px 0 0;
+    h1 {
+      margin: 0 0 10px;
+      color: #172554;
+      font-size: clamp(28px, 5vw, 38px);
+      line-height: 1.12;
+    }
+
+    .description {
+      margin: 0 0 30px;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
-    .intro {
-      margin: 0 0 24px;
-      color: #4b5563;
-      font-size: 14px;
-      line-height: 1.65;
-    }
-
-    label {
+    .field-label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 9px;
       font-size: 14px;
       font-weight: 700;
     }
 
+    .input-wrap {
+      display: flex;
+      gap: 10px;
+    }
+
     input {
       width: 100%;
+      min-width: 0;
       height: 50px;
-      padding: 0 15px;
+      padding: 0 16px;
       border: 1px solid var(--border);
       border-radius: 12px;
       outline: none;
-      font-size: 15px;
-      transition: .2s ease;
+      color: var(--text);
+      background: #fff;
+      font-size: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px rgba(65, 105, 168, .12);
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(63, 99, 167, 0.12);
     }
 
     button {
-      width: 100%;
       height: 50px;
-      margin-top: 16px;
+      padding: 0 24px;
       border: 0;
       border-radius: 12px;
+      cursor: pointer;
       color: #fff;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       font-size: 15px;
       font-weight: 800;
-      cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease;
+      white-space: nowrap;
+      transition: transform 0.15s, opacity 0.15s;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(47, 79, 130, .24);
-    }
-
-    button:disabled {
-      cursor: wait;
-      opacity: .7;
-      transform: none;
-    }
+    button:hover { transform: translateY(-1px); }
+    button:disabled { cursor: wait; opacity: 0.65; transform: none; }
 
     .message {
-      display: none;
-      margin-top: 16px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: 13px;
+      min-height: 22px;
+      margin: 12px 0 0;
+      font-size: 14px;
       line-height: 1.5;
     }
 
-    .message.error {
-      display: block;
-      color: #991b1b;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-    }
+    .message.error { color: var(--danger); }
+    .message.success { color: var(--success); }
 
-    .message.info {
-      display: block;
-      color: #1e3a5f;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-    }
-
-    .footer {
-      padding: 18px 28px;
+    .helper {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid #edf0f6;
       color: var(--muted);
-      background: #f8fafc;
-      border-top: 1px solid #edf1f6;
       font-size: 12px;
-      line-height: 1.5;
-      text-align: center;
+      line-height: 1.6;
     }
 
     @media (max-width: 560px) {
-      body { padding: 14px; }
-      .content { padding: 30px 24px 28px; }
-      .brand { align-items: flex-start; }
-      .brand img { width: 58px; height: 58px; }
-      .brand-copy h1 { font-size: 22px; }
+      body { padding: 16px; }
+      .card { padding: 28px 22px; border-radius: 18px; }
+      .input-wrap { flex-direction: column; }
+      button { width: 100%; }
     }
   </style>
 </head>
 <body>
   <main class="card">
-    <div class="top-bar"></div>
+    <div class="brand">
+      <div class="brand-mark">ICVEE</div>
+      <p class="brand-name">2026 Ninth International Conference on Vocational Education and Electrical Engineering</p>
+    </div>
 
-    <section class="content">
-      <div class="brand">
-        <img src="jeisbi.png" alt="JEISBI Logo" onerror="this.style.display='none'">
-        <div class="brand-copy">
-          <h1>Letter of Acceptance</h1>
-          <p>Journal of Emerging Information Systems and Business Intelligence</p>
-        </div>
-      </div>
+    <h1>Letter of Acceptance</h1>
+    <p class="description">
+      Enter your Manuscript ID to verify the record and open the official Letter of Acceptance.
+    </p>
 
-      <p class="intro">
-        Enter your article ID to verify the acceptance record and display the official JEISBI Letter of Acceptance.
-      </p>
-
-      <form id="verificationForm" novalidate>
-        <label for="articleId">Article ID</label>
+    <form id="loaForm" novalidate>
+      <label class="field-label" for="manuscriptId">Manuscript ID</label>
+      <div class="input-wrap">
         <input
-          id="articleId"
-          name="articleId"
+          id="manuscriptId"
+          name="manuscriptId"
           type="text"
-          placeholder="Example: 88888"
+          inputmode="numeric"
           autocomplete="off"
+          placeholder="Example: 1571169971"
+          aria-describedby="message"
           required
-        >
-        <button id="verifyButton" type="submit">View Letter of Acceptance</button>
-      </form>
+        />
+        <button id="submitButton" type="submit">View LOA</button>
+      </div>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </form>
 
-      <div id="message" class="message" role="alert"></div>
-    </section>
-
-    <footer class="footer">
-      JEISBI · State University of Surabaya<br>
-      jeisbi@unesa.ac.id
-    </footer>
+    <div class="helper">
+      The Manuscript ID must match an accepted manuscript listed in the conference database.
+    </div>
   </main>
 
   <script>
-    const form = document.getElementById('verificationForm');
-    const input = document.getElementById('articleId');
-    const button = document.getElementById('verifyButton');
+    const form = document.getElementById('loaForm');
+    const input = document.getElementById('manuscriptId');
+    const button = document.getElementById('submitButton');
     const message = document.getElementById('message');
 
     function parseCSV(text) {
       const rows = [];
       let row = [];
       let field = '';
-      let quoted = false;
+      let insideQuotes = false;
 
       for (let i = 0; i < text.length; i += 1) {
         const char = text[i];
         const next = text[i + 1];
 
-        if (char === '"' && quoted && next === '"') {
+        if (char === '"' && insideQuotes && next === '"') {
           field += '"';
           i += 1;
         } else if (char === '"') {
-          quoted = !quoted;
-        } else if (char === ',' && !quoted) {
+          insideQuotes = !insideQuotes;
+        } else if (char === ',' && !insideQuotes) {
           row.push(field.trim());
           field = '';
-        } else if ((char === '\n' || char === '\r') && !quoted) {
+        } else if ((char === '\n' || char === '\r') && !insideQuotes) {
           if (char === '\r' && next === '\n') i += 1;
           row.push(field.trim());
           field = '';
@@ -252,6 +233,7 @@
 
       row.push(field.trim());
       if (row.some(value => value !== '')) rows.push(row);
+
       if (rows.length < 2) return [];
 
       const headers = rows[0].map(header => header.replace(/^\uFEFF/, '').trim());
@@ -263,53 +245,52 @@
       );
     }
 
-    function showMessage(text, type = 'error') {
+    function setMessage(text, type = '') {
       message.textContent = text;
-      message.className = `message ${type}`;
-    }
-
-    function normalize(value) {
-      return String(value || '').trim().toLowerCase();
+      message.className = `message ${type}`.trim();
     }
 
     form.addEventListener('submit', async event => {
       event.preventDefault();
 
-      const articleId = input.value.trim();
-      if (!articleId) {
-        showMessage('Please enter your Article ID.');
+      const manuscriptId = input.value.trim();
+      if (!manuscriptId) {
+        setMessage('Please enter your Manuscript ID.', 'error');
         input.focus();
         return;
       }
 
       button.disabled = true;
-      button.textContent = 'Verifying...';
-      showMessage('Checking the JEISBI acceptance database...', 'info');
+      button.textContent = 'Checking...';
+      setMessage('Checking manuscript data...');
 
       try {
-        const response = await fetch(`/jeisbi-loa/data.csv?v=${Date.now()}`, { cache: 'no-store' });
-        if (!response.ok) throw new Error('data.csv could not be loaded.');
+        const response = await fetch(`/icvee-loa/data.csv?v=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Unable to load data.csv');
 
         const records = parseCSV(await response.text());
-        const record = records.find(item => normalize(item.article_id) === normalize(articleId));
+        const record = records.find(item =>
+          String(item.manuscript_id || '').trim().toLowerCase() === manuscriptId.toLowerCase()
+        );
 
         if (!record) {
-          showMessage('The Article ID was not found. Please check the ID and try again.');
+          setMessage('Manuscript ID was not found or has not been accepted.', 'error');
           return;
         }
 
-        if (normalize(record.status) !== 'accepted') {
-          showMessage('The article is not currently marked as accepted.');
+        if (String(record.status || '').trim().toLowerCase() !== 'accepted') {
+          setMessage('This manuscript is not currently marked as accepted.', 'error');
           return;
         }
 
-        window.location.href = `/jeisbi-loa/loa.html?id=${encodeURIComponent(record.article_id)}`;
+        setMessage('Manuscript verified. Opening the LOA...', 'success');
+        window.location.href = `/icvee-loa/loa.html?id=${encodeURIComponent(manuscriptId)}`;
       } catch (error) {
         console.error(error);
-        showMessage('The acceptance database could not be loaded. Please try again later.');
+        setMessage('The manuscript database could not be loaded. Please try again.', 'error');
       } finally {
         button.disabled = false;
-        button.textContent = 'View Letter of Acceptance';
+        button.textContent = 'View LOA';
       }
     });
   </script>
