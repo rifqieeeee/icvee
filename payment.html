@@ -164,35 +164,46 @@
     .error-panel a { color: var(--primary-blue); font-weight: 700; }
     .hidden { display: none !important; }
 
-    .home-button,
-    .print-button {
-      position: fixed;
-      top: 18px;
-      z-index: 9999;
-      width: 42px;
-      height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,.95);
-      color: #0b5f6d;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,.18);
-      transition: .2s;
+    .floating-buttons {
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        z-index: 9999;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .home-button { left: 18px; }
-    .print-button { right: 18px; }
+    .home-button,
+    .print-button {
+        width: 42px;
+        height: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,.95);
+        color: #0b5f6d;
+
+        text-decoration: none;
+        cursor: pointer;
+
+        box-shadow: 0 4px 12px rgba(0,0,0,.18);
+        transition: .2s;
+    }
 
     .home-button:hover,
     .print-button:hover {
-      transform: scale(1.08);
-      background: #0b5f6d;
-      color: #fff;
+        transform: scale(1.08);
+        background: #0b5f6d;
+        color: #fff;
     }
+
+    
 
     .page-watermark {
       position: absolute;
@@ -254,18 +265,30 @@
   </style>
 </head>
 <body>
-  <a class="home-button" href="https://icvee.vercel.app/" title="Home" aria-label="Home">
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-      <path d="M8 .5l7 6V15a1 1 0 0 1-1 1h-4V10H6v6H2a1 1 0 0 1-1-1V6.5l7-6z"/>
-    </svg>
-  </a>
 
-  <button class="print-button" type="button" onclick="window.print()" title="Print" aria-label="Print">
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-      <path d="M2 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3h-2v4H4v-4H2V7zm3 3v3h6v-3H5zm7-4H4a1 1 0 0 0-1 1v2h1V8h8v1h1V7a1 1 0 0 0-1-1z"/>
-      <path d="M5 1h6v3H5V1z"/>
-    </svg>
-  </button>
+    <div class="floating-buttons">
+
+        <a class="home-button"
+        href="https://icvee.vercel.app/"
+        title="Home"
+        aria-label="Home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 .5l7 6V15a1 1 0 0 1-1 1h-4V10H6v6H2a1 1 0 0 1-1-1V6.5l7-6z"/>
+            </svg>
+        </a>
+
+        <button class="print-button"
+                type="button"
+                onclick="window.print()"
+                title="Print"
+                aria-label="Print">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3h-2v4H4v-4H2V7zm3 3v3h6v-3H5zm7-4H4a1 1 0 0 0-1 1v2h1V8h8v1h1V7a1 1 0 0 0-1-1z"/>
+                <path d="M5 1h6v3H5V1z"/>
+            </svg>
+        </button>
+
+    </div>
 
   <div id="loading" class="loading">Loading and verifying manuscript data...</div>
 
