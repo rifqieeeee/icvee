@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="icvee.png" rel="icon" />
+
+  <title>Reviewer Certificate - ICVEE 2026</title>
+
+  <style>
+    :root {
+      --page-width: 297mm;
+      --page-height: 210mm;
+      --blue: #0a2684;
+      --text-blue: #17398c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: #e8edf4;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* =========================
+       CERTIFICATE
+    ========================== */
+    .certificate-page {
+      position: relative;
+      width: var(--page-width);
+      height: var(--page-height);
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        url("reviewer.png")
+        center center / 100% 100% no-repeat;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    /*
+      Posisi nomor sertifikat.
+      Ubah nilai top apabila posisi pada template perlu disesuaikan.
+    */
+    .certificate-number {
+      position: absolute;
+      top: 73mm;
+      left: 50%;
+      z-index: 3;
+      width: 150mm;
+      transform: translateX(-50%);
+      margin: 0;
+      text-align: center;
+      color: var(--text-blue);
+      font-size: 15pt;
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+
+    /*
+      Posisi nama reviewer.
+    */
+    .reviewer-overlay {
+      position: absolute;
+      top: 108mm;
+      left: 50%;
+      z-index: 3;
+      width: 210mm;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .reviewer-name {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: var(--text-blue);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27pt;
+      font-weight: 700;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    /* Affiliation disembunyikan secara default.
+       Hapus class hidden pada HTML jika ingin ditampilkan. */
+    .reviewer-affiliation {
+      margin: 8px 0 0;
+      color: var(--text-blue);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 13pt;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    /* =========================
+       FLOATING BUTTONS
+    ========================== */
+    .floating-buttons {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .home-button,
+    .print-button {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--blue);
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .home-button:hover,
+    .print-button:hover {
+      transform: scale(1.08);
+      background: var(--blue);
+      color: #ffffff;
+    }
+
+    /* =========================
+       LOADING AND ERROR
+    ========================== */
+    .loading,
+    .error-panel {
+      width: min(100%, 620px);
+      margin: 80px auto;
+      padding: 30px;
+      border-radius: 16px;
+      background: #ffffff;
+      color: #1f2937;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(10, 38, 132, 0.16);
+    }
+
+    .loading {
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .error-panel h1 {
+      margin: 0 0 14px;
+      color: #b42318;
+    }
+
+    .error-panel p {
+      margin: 0 0 20px;
+      line-height: 1.6;
+    }
+
+    .error-panel a {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .error-panel a:hover {
+      text-decoration: underline;
+    }
+
+    .update-note {
+      display: block;
+      margin-top: 18px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       RESPONSIVE SCREEN
+    ========================== */
+    @media screen and (max-width: 1100px) {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+
+      .certificate-page {
+        width: 100vw;
+        height: calc(100vw * 210 / 297);
+        min-height: 0;
+        box-shadow: none;
+      }
+
+      /*
+        Posisi elemen pada layar kecil memakai persentase
+        agar mengikuti skala sertifikat.
+      */
+      .certificate-number {
+        top: 34.76%;
+        width: 60%;
+        font-size: clamp(8px, 1.35vw, 15pt);
+      }
+
+      .reviewer-overlay {
+        top: 51.43%;
+        width: 72%;
+      }
+
+      .reviewer-name {
+        font-size: clamp(15px, 3.1vw, 36px);
+      }
+
+      .reviewer-affiliation {
+        margin-top: clamp(2px, 0.7vw, 8px);
+        font-size: clamp(8px, 1.4vw, 15px);
+      }
+    }
+
+    /* =========================
+       PRINT
+    ========================== */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 297mm;
+        height: 210mm;
+        background: #ffffff;
+      }
+
+      body {
+        padding: 0;
+      }
+
+      .certificate-page {
+        width: 297mm;
+        height: 210mm;
+        margin: 0;
+        box-shadow: none;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .floating-buttons,
+      .loading,
+      .error-panel {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Tombol Home dan Print -->
+  <div class="floating-buttons">
+    <a
+      class="home-button"
+      href="https://icvee.vercel.app/"
+      title="Home"
+      aria-label="Home"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        aria-hidden="true"
+      >
+        <path
+          d="M8 .5l7 6V15a1 1 0 0 1-1 1h-4V10H6v6H2a1 1 0 0 1-1-1V6.5l7-6z"
+        />
+      </svg>
+    </a>
+
+    <button
+      class="print-button"
+      type="button"
+      onclick="window.print()"
+      title="Print certificate"
+      aria-label="Print certificate"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3h-2v4H4v-4H2V7zm3 3v3h6v-3H5zm7-4H4a1 1 0 0 0-1 1v2h1V8h8v1h1V7a1 1 0 0 0-1-1z"
+        />
+        <path d="M5 1h6v3H5V1z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading" class="loading">
+    Loading and verifying reviewer data...
+  </div>
+
+  <!-- Error -->
+  <div id="errorPanel" class="error-panel hidden">
+    <h1>Certificate Not Available</h1>
+
+    <p id="errorMessage">
+      The requested reviewer certificate could not be verified.
+    </p>
+
+    <a href="index.html">Return to the verification page</a>
+
+    <small class="update-note">
+      If the data is not available, please request an update via
+      +62 823-3051-5802.
+    </small>
+  </div>
+
+  <!-- Certificate -->
+  <main id="certificatePage" class="certificate-page hidden">
+    <!-- Nomor Sertifikat -->
+    <div id="certificateNumber" class="certificate-number"></div>
+
+    <!-- Nama Reviewer -->
+    <section class="reviewer-overlay">
+      <h1 id="reviewerName" class="reviewer-name"></h1>
+
+      <!--
+        Affiliation tersedia dari CSV, tetapi disembunyikan.
+        Hapus kata "hidden" jika ingin affiliation tampil.
+      -->
+      <p
+        id="reviewerAffiliation"
+        class="reviewer-affiliation hidden"
+      ></p>
+    </section>
+  </main>
+
+  <script>
+    /*
+      ==========================================================
+      PENGATURAN FILE
+      ==========================================================
+
+      1. Simpan data reviewer dengan nama: reviewer.csv
+      2. Simpan template sertifikat dengan nama:
+         sertifikat-reviewer.png
+      3. Contoh URL:
+         reviewer.html?id=1924965
+
+      ID yang digunakan adalah kolom "EDAS ID" pada reviewer.csv.
+    */
+    const CSV_FILE = 'reviewer.csv';
+
+    const loading = document.getElementById('loading');
+    const errorPanel = document.getElementById('errorPanel');
+    const errorMessage = document.getElementById('errorMessage');
+    const certificatePage = document.getElementById('certificatePage');
+
+    /**
+     * Parser CSV yang mendukung:
+     * - koma di dalam tanda kutip
+     * - tanda kutip ganda
+     * - baris Windows dan Unix
+     * - BOM UTF-8
+     */
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let insideQuotes = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && insideQuotes && next === '"') {
+          field += '"';
+          i += 1;
+        } else if (char === '"') {
+          insideQuotes = !insideQuotes;
+        } else if (char === ',' && !insideQuotes) {
+          row.push(field.trim());
+          field = '';
+        } else if (
+          (char === '\n' || char === '\r') &&
+          !insideQuotes
+        ) {
+          if (char === '\r' && next === '\n') {
+            i += 1;
+          }
+
+          row.push(field.trim());
+          field = '';
+
+          if (row.some(value => value !== '')) {
+            rows.push(row);
+          }
+
+          row = [];
+        } else {
+          field += char;
+        }
+      }
+
+      row.push(field.trim());
+
+      if (row.some(value => value !== '')) {
+        rows.push(row);
+      }
+
+      if (rows.length < 2) {
+        return [];
+      }
+
+      const headers = rows[0].map(header =>
+        header
+          .replace(/^\uFEFF/, '')
+          .trim()
+      );
+
+      return rows.slice(1).map(values =>
+        headers.reduce((record, header, index) => {
+          record[header] = values[index] ?? '';
+          return record;
+        }, {})
+      );
+    }
+
+    /**
+     * Menyamakan format ID agar:
+     * 001925965 dan 1925965 dianggap sama.
+     */
+    function normalizeId(value) {
+      const id = String(value ?? '').trim();
+
+      if (/^\d+$/.test(id)) {
+        return String(Number(id));
+      }
+
+      return id.toLowerCase();
+    }
+
+    /**
+     * Membersihkan teks dari spasi berlebih.
+     */
+    function cleanText(value) {
+      return String(value ?? '')
+        .replace(/^\uFEFF/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    /**
+     * Menuliskan teks dengan aman tanpa innerHTML.
+     */
+    function setText(id, value) {
+      const element = document.getElementById(id);
+
+      if (element) {
+        element.textContent = value || '';
+      }
+    }
+
+    /**
+     * Menampilkan pesan kegagalan.
+     */
+    function showError(message) {
+      loading.classList.add('hidden');
+      certificatePage.classList.add('hidden');
+      errorMessage.textContent = message;
+      errorPanel.classList.remove('hidden');
+    }
+
+    /**
+     * Menyusun nama reviewer.
+     *
+     * Urutan:
+     * Title + Given name + Surname
+     *
+     * Contoh:
+     * Dr. Zainul Abidin
+     * Mr. Rifqi Abdillah
+     */
+    function buildReviewerName(record) {
+      const title = cleanText(record['Title']);
+      const givenName = cleanText(record['Given name']);
+      const surname = cleanText(record['Surname']);
+
+      return [title, givenName, surname]
+        .filter(Boolean)
+        .join(' ');
+    }
+
+    /**
+     * Menghitung jumlah paper yang direview.
+     * Fungsi ini dapat dipakai bila nomor sertifikat ingin
+     * dibedakan berdasarkan jumlah paper.
+     */
+    function countReviewedPapers(record) {
+      return Object.keys(record).filter(key => {
+        return /^Paper\s+\d+$/i.test(key) &&
+          cleanText(record[key]) !== '';
+      }).length;
+    }
+
+    /**
+     * Memuat dan memverifikasi sertifikat reviewer.
+     */
+    async function loadCertificate() {
+      const query = new URLSearchParams(window.location.search);
+      const reviewerId = cleanText(query.get('id'));
+
+      if (!reviewerId) {
+        showError(
+          'No Reviewer ID was provided. Example: reviewer.html?id=1924965'
+        );
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${CSV_FILE}?v=${Date.now()}`,
+          { cache: 'no-store' }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Unable to load ${CSV_FILE}. HTTP ${response.status}`
+          );
+        }
+
+        const csvText = await response.text();
+        const records = parseCSV(csvText);
+
+        if (!records.length) {
+          showError(
+            'The reviewer database is empty or has an invalid CSV format.'
+          );
+          return;
+        }
+
+        const record = records.find(item =>
+          normalizeId(item['EDAS ID']) === normalizeId(reviewerId)
+        );
+
+        if (!record) {
+          showError(
+            'The Reviewer ID was not found in the conference database.'
+          );
+          return;
+        }
+
+        const reviewerName = buildReviewerName(record);
+        const affiliation = cleanText(record['Affiliation']);
+        const edasId = cleanText(record['EDAS ID']);
+        const reviewedPaperCount = countReviewedPapers(record);
+
+        if (!reviewerName) {
+          showError(
+            'No reviewer name is registered for this Reviewer ID.'
+          );
+          return;
+        }
+
+        /*
+          Nomor sertifikat otomatis berdasarkan EDAS ID.
+
+          Contoh:
+          Certificate No. ICVEE2026-REV-1924965
+
+          Apabila format nomor ingin diubah, edit baris berikut.
+        */
+        const certificateNumber =
+          `Certificate No. ICVEE2026-REV-${edasId}`;
+
+        setText('reviewerName', reviewerName);
+        setText('reviewerAffiliation', affiliation);
+        setText('certificateNumber', certificateNumber);
+
+        document.title =
+          `Reviewer Certificate - ${reviewerName} - ICVEE 2026`;
+
+        /*
+          Data tambahan tersedia bila nanti diperlukan:
+          - record['Email']
+          - record['Country']
+          - record['Affiliation']
+          - reviewedPaperCount
+        */
+        console.info('Reviewer verified:', {
+          name: reviewerName,
+          edasId,
+          affiliation,
+          reviewedPaperCount
+        });
+
+        loading.classList.add('hidden');
+        errorPanel.classList.add('hidden');
+        certificatePage.classList.remove('hidden');
+      } catch (error) {
+        console.error(error);
+
+        showError(
+          'The reviewer database could not be loaded. Please make sure reviewer.csv is available and open this page through a web server.'
+        );
+      }
+    }
+
+    loadCertificate();
+  </script>
+</body>
+</html>
