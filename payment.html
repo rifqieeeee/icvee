@@ -474,6 +474,16 @@
           return;
         }
 
+        const paymentStatus = String(record.payment ?? '')
+          .replace(/^\uFEFF/, '')
+          .trim()
+          .toLowerCase();
+
+        if (paymentStatus !== 'ada') {
+          showError('No payment record was found for this manuscript.');
+          return;
+        }
+
         setText('receiptDate', formatCurrentDate());
         setText('receiptNo', `PR-ICVEE-2026-${record.manuscript_id}`);
         setText('manuscriptId', record.manuscript_id);
