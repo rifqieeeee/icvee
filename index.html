@@ -98,7 +98,7 @@
       display: flex;
       gap: 10px;
     }
-    
+
     input{
         width:100%;
         height:50px;
@@ -108,6 +108,54 @@
         outline:none;
         font-size:16px;
         margin-bottom:18px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    .action-buttons button {
+        flex: 1;
+        height: 50px;
+    }
+
+    #loaButton {
+        background: linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+    }
+
+    #paymentButton {
+        background: linear-gradient(
+            135deg,
+            #067647,
+            #079455
+        );
+    }
+
+    .presenter-button-wrap {
+        margin-top: 12px;
+    }
+
+    #presenterButton {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(
+            135deg,
+            #7c3aed,
+            #5b21b6
+        );
+    }
+
+    #presenterButton:hover {
+        background: linear-gradient(
+            135deg,
+            #6d28d9,
+            #4c1d95
+        );
     }
 
     .action-buttons{
@@ -234,6 +282,16 @@
           </button>
       </div>
 
+      <div class="presenter-button-wrap">
+          <button
+              id="presenterButton"
+              type="submit"
+              name="documentType"
+              value="presenter">
+              Presenter Certificate
+          </button>
+      </div>
+
       <p id="message"
         class="message"
         role="status"
@@ -241,8 +299,14 @@
       </p>
     </form>
 
-    <div class="helper">
+    <!-- <div class="helper">
       The Manuscript ID must match an accepted manuscript listed in the conference database.
+    </div> -->
+
+    <div class="helper">
+        Can't find your manuscript or noticed incorrect information?
+        Please contact the conference committee via Email at
+        <strong>icvee@unesa.ac.id</strong> for assistance.
     </div>
   </main>
 
@@ -251,6 +315,7 @@
   const input = document.getElementById('manuscriptId');
   const loaButton = document.getElementById('loaButton');
   const paymentButton = document.getElementById('paymentButton');
+  const presenterButton = document.getElementById('presenterButton');
   const message = document.getElementById('message');
 
   function parseCSV(text) {
@@ -336,6 +401,7 @@
   function setButtonsLoading(isLoading, selectedType = '') {
     loaButton.disabled = isLoading;
     paymentButton.disabled = isLoading;
+    presenterButton.disabled = isLoading;
 
     if (isLoading && selectedType === 'loa') {
       loaButton.textContent = 'Checking...';
@@ -347,6 +413,12 @@
       paymentButton.textContent = 'Checking...';
     } else {
       paymentButton.textContent = 'View Payment';
+    }
+
+    if (isLoading && selectedType === 'presenter') {
+        presenterButton.textContent = 'Checking...';
+    } else {
+        presenterButton.textContent = 'Presenter Certificate';
     }
   }
 
@@ -446,6 +518,30 @@
         window.location.href =
           `payment.html?id=${encodeURIComponent(manuscriptId)}`;
       }
+
+      if (documentType === 'presenter') {
+
+          const presenter = String(record.presenter || '').trim();
+
+          if (!presenter) {
+              setMessage(
+                  'No presenter has been assigned to this manuscript.',
+                  'error'
+              );
+              return;
+          }
+
+          setMessage(
+              'Presenter verified. Opening the presenter certificate...',
+              'success'
+          );
+
+          window.location.href =
+              `presenter.html?id=${encodeURIComponent(manuscriptId)}`;
+
+          return;
+      }
+
     } catch (error) {
       console.error(error);
 

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <link href="icvee.png" rel="icon" />
+  <title>Presenter Certificate - ICVEE 2026</title>
+
+  <style>
+    :root {
+      --page-width: 297mm;
+      --page-height: 210mm;
+      --blue: #0a2684;
+      --text: #132a74;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: #e8edf4;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    .certificate-page {
+      position: relative;
+      width: var(--page-width);
+      height: var(--page-height);
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        url("sertifikat.png")
+        center center / 100% 100% no-repeat;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    /*
+      Posisi nama dan nomor mengikuti template yang Anda kirim.
+      Nilai top dapat disesuaikan beberapa milimeter jika diperlukan.
+    */
+    .presenter-overlay{
+      position:absolute;
+      top:108mm;
+      left:50%;
+      width:175mm;
+      transform:translateX(-50%);
+      text-align:center;
+  }
+
+    .presenter-name{
+        margin:0;
+        padding:0;
+        border:none;
+        font-family:Georgia,"Times New Roman",serif;
+        font-size:27pt;
+        font-weight:700;
+        color:#17398c;
+    }
+
+    .certificate-number{
+        position:absolute;
+        top:73mm;          /* tepat di bawah tulisan CERTIFICATE */
+        left:50%;
+        transform:translateX(-50%);
+        width:120mm;
+        text-align:center;
+        color:#17398c;
+        font-size:15pt;
+        font-weight:600;
+        letter-spacing:.4px;
+        z-index:3;
+        font-style: italic;
+    }
+
+    .floating-buttons {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .home-button,
+    .print-button {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--blue);
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+      transition: 0.2s;
+    }
+
+    .home-button:hover,
+    .print-button:hover {
+      transform: scale(1.08);
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .loading,
+    .error-panel {
+      width: min(100%, 620px);
+      margin: 80px auto;
+      padding: 30px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(10, 38, 132, 0.16);
+      color: #1f2937;
+      text-align: center;
+    }
+
+    .error-panel h1 {
+      margin-top: 0;
+      color: #b42318;
+    }
+
+    .error-panel a {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media screen and (max-width: 1100px) {
+      body {
+        padding: 0;
+        background: #fff;
+      }
+
+      .certificate-page {
+        width: 100vw;
+        height: calc(100vw * 210 / 297);
+        min-height: 0;
+        box-shadow: none;
+      }
+
+      .presenter-overlay{
+          position:absolute;
+          top:97mm;
+          left:50%;
+          width:175mm;
+          transform:translateX(-50%);
+          text-align:center;
+      }
+
+      .presenter-name {
+        font-size: clamp(16px, 3.1vw, 36px);
+      }
+
+      .certificate-number {
+        font-size: clamp(12px, 1vw, 12px);
+      }
+    }
+
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 297mm;
+        height: 210mm;
+        background: #fff;
+      }
+
+      body {
+        padding: 0;
+      }
+
+      .certificate-page {
+        width: 297mm;
+        height: 210mm;
+        margin: 0;
+        box-shadow: none;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .floating-buttons,
+      .loading,
+      .error-panel {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="floating-buttons">
+    <a
+      class="home-button"
+      href="https://icvee.vercel.app/"
+      title="Home"
+      aria-label="Home"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+        fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 .5l7 6V15a1 1 0 0 1-1 1h-4V10H6v6H2a1 1 0 0 1-1-1V6.5l7-6z"/>
+      </svg>
+    </a>
+
+    <button
+      class="print-button"
+      type="button"
+      onclick="window.print()"
+      title="Print certificate"
+      aria-label="Print certificate"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+        fill="currentColor" viewBox="0 0 16 16">
+        <path d="M2 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3h-2v4H4v-4H2V7zm3 3v3h6v-3H5zm7-4H4a1 1 0 0 0-1 1v2h1V8h8v1h1V7a1 1 0 0 0-1-1z"/>
+        <path d="M5 1h6v3H5V1z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="loading" class="loading">
+    Loading and verifying presenter data...
+  </div>
+
+  <div id="errorPanel" class="error-panel hidden">
+    <h1>Certificate Not Available</h1>
+    <p id="errorMessage">
+      The requested presenter certificate could not be verified.
+    </p>
+    <a href="index.html">Return to the verification page</a>
+  </div>
+
+  <main id="certificatePage" class="certificate-page hidden">
+
+      <!-- Nomor Sertifikat -->
+      <div id="certificateNumber" class="certificate-number"></div>
+
+      <!-- Nama Presenter -->
+      <section class="presenter-overlay">
+          <h1 id="presenterName" class="presenter-name"></h1>
+      </section>
+
+  </main>
+
+  <script>
+    const loading = document.getElementById('loading');
+    const errorPanel = document.getElementById('errorPanel');
+    const errorMessage = document.getElementById('errorMessage');
+    const certificatePage = document.getElementById('certificatePage');
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let insideQuotes = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && insideQuotes && next === '"') {
+          field += '"';
+          i += 1;
+        } else if (char === '"') {
+          insideQuotes = !insideQuotes;
+        } else if (char === ',' && !insideQuotes) {
+          row.push(field.trim());
+          field = '';
+        } else if ((char === '\n' || char === '\r') && !insideQuotes) {
+          if (char === '\r' && next === '\n') {
+            i += 1;
+          }
+
+          row.push(field.trim());
+          field = '';
+
+          if (row.some(value => value !== '')) {
+            rows.push(row);
+          }
+
+          row = [];
+        } else {
+          field += char;
+        }
+      }
+
+      row.push(field.trim());
+
+      if (row.some(value => value !== '')) {
+        rows.push(row);
+      }
+
+      if (rows.length < 2) {
+        return [];
+      }
+
+      const headers = rows[0].map(header =>
+        header.replace(/^\uFEFF/, '').trim()
+      );
+
+      return rows.slice(1).map(values =>
+        headers.reduce((record, header, index) => {
+          record[header] = values[index] ?? '';
+          return record;
+        }, {})
+      );
+    }
+
+    function normalizeId(value) {
+      const id = String(value ?? '').trim();
+
+      if (/^\d+$/.test(id)) {
+        return String(Number(id));
+      }
+
+      return id.toLowerCase();
+    }
+
+    function normalizeValue(value) {
+      return String(value ?? '')
+        .replace(/^\uFEFF/, '')
+        .trim()
+        .toLowerCase();
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+
+      if (element) {
+        element.textContent = value || '';
+      }
+    }
+
+    function showError(message) {
+      loading.classList.add('hidden');
+      certificatePage.classList.add('hidden');
+      errorMessage.textContent = message;
+      errorPanel.classList.remove('hidden');
+    }
+
+    async function loadCertificate() {
+      const manuscriptId =
+        new URLSearchParams(window.location.search).get('id')?.trim();
+
+      if (!manuscriptId) {
+        showError(
+          'No Manuscript ID was provided. Example: presenter.html?id=1571169971'
+        );
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `data.csv?v=${Date.now()}`,
+          { cache: 'no-store' }
+        );
+
+        if (!response.ok) {
+          throw new Error('Unable to load data.csv');
+        }
+
+        const records = parseCSV(await response.text());
+
+        const record = records.find(item =>
+          normalizeId(item.manuscript_id) === normalizeId(manuscriptId)
+        );
+
+        if (!record) {
+          showError(
+            'The Manuscript ID was not found in the conference database.'
+          );
+          return;
+        }
+
+        if (normalizeValue(record.status) !== 'accepted') {
+          showError(
+            'This manuscript is not currently marked as accepted.'
+          );
+          return;
+        }
+
+        const presenter = String(record.presenter ?? '').trim();
+
+        if (!presenter) {
+          showError(
+            'No presenter name is registered for this manuscript.'
+          );
+          return;
+        }
+
+        /*
+          Bila Anda menambahkan kolom certificate_number di data.csv,
+          nilainya akan dipakai. Jika kosong, nomor dibuat otomatis
+          berdasarkan manuscript_id.
+        */
+        const certificateNumber =
+          String(record.certificate_number ?? '').trim() ||
+          `Certificate No. ICVEE2026-PRES-${record.manuscript_id}`;
+
+        setText('presenterName', presenter);
+        setText('certificateNumber', certificateNumber);
+
+        document.title =
+          `Presenter Certificate - ${presenter} - ICVEE 2026`;
+
+        loading.classList.add('hidden');
+        errorPanel.classList.add('hidden');
+        certificatePage.classList.remove('hidden');
+      } catch (error) {
+        console.error(error);
+
+        showError(
+          'The conference database could not be loaded. Please open this page through a web server.'
+        );
+      }
+    }
+
+    loadCertificate();
+  </script>
+</body>
+</html>
