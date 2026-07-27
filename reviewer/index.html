@@ -495,7 +495,7 @@
     <p id="certificateErrorMessage">
       The requested reviewer certificate could not be verified.
     </p>
-    <a href="reviewer.html">Return to the verification page</a>
+    <a href="/reviewer/reviewer.html">Return to the verification page</a>
   </div>
 
   <main id="certificatePage" class="certificate-page hidden">
@@ -879,7 +879,7 @@
         }
 
         window.location.href =
-          `reviewer.html?id=${encodeURIComponent(edasId)}`;
+          `/reviewer/reviewer.html?id=${encodeURIComponent(edasId)}`;
       } catch (error) {
         console.error(error);
 
