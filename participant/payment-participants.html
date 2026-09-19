@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <link href="icvee.png" rel="icon" />
+  <title>Official Participant Payment Receipt - ICVEE 2026</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --page-width: 210mm;
+      --page-height: 297mm;
+      --content-left: 22mm;
+      --content-right: 22mm;
+      --content-top: 62mm;
+      --content-bottom: 28mm;
+      --text-color: #222;
+      --primary-blue: #0b5d66;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #e9edf3;
+      color: var(--text-color);
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    body { padding: 24px; }
+
+    .page {
+      position: relative;
+      width: var(--page-width);
+      min-height: var(--page-height);
+      margin: 0 auto;
+      padding:
+        var(--content-top)
+        var(--content-right)
+        var(--content-bottom)
+        var(--content-left);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff url("bg.png") center center / 100% 100% no-repeat;
+      box-shadow: 0 8px 26px rgba(0,0,0,.14);
+    }
+
+    .letter-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .date {
+      margin: 0 0 5mm;
+      font-size: 11.5pt;
+      text-align: right;
+    }
+
+    .receipt-title {
+      margin: 0 0 6mm;
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-align: center;
+      text-transform: uppercase;
+      text-decoration: underline;
+    }
+
+    .body-text {
+      font-size: 11.5pt;
+      line-height: 1.35;
+      text-align: justify;
+    }
+
+    .body-text p { margin: 0 0 4mm; }
+
+    .receipt-box {
+      width: 100%;
+      margin: 3mm 0 5mm;
+      border-collapse: collapse;
+      font-size: 11.5pt;
+      line-height: 1.3;
+    }
+
+    .receipt-box td {
+      padding: 1.4mm 0;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    .receipt-box td:first-child {
+      width: 38mm;
+      font-weight: 700;
+    }
+
+    .receipt-box td:nth-child(2) {
+      width: 5mm;
+      text-align: center;
+    }
+
+    .status-paid {
+      color: green;
+      font-size: 15pt;
+      font-weight: 700;
+      letter-spacing: .4px;
+    }
+
+    .payment-amount { font-weight: 700; }
+
+    .signature-section {
+      width: 72mm;
+      margin: 5mm 0 0 auto;
+      font-size: 11.5pt;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    .signature-space {
+      position: relative;
+      height: 26mm;
+      display: flex;
+      align-items: center;
+    }
+
+    .signature-image {
+      width: 82mm;
+      height: 38mm;
+      object-fit: contain;
+      object-position: left center;
+      transform: translateX(-25mm);
+    }
+
+    .signature-placeholder {
+      width: 42mm;
+      height: 18mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #aab3c2;
+      border-radius: 4px;
+      color: #8a94a3;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+    }
+
+    .loading,
+    .error-panel {
+      width: min(100%,620px);
+      margin: 80px auto;
+      padding: 30px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(11,93,102,.15);
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+    }
+
+    .error-panel h1 { color: #b42318; }
+    .error-panel a { color: var(--primary-blue); font-weight: 700; }
+
+    .hidden { display: none !important; }
+
+    .floating-buttons {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .home-button,
+    .print-button {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.95);
+      color: #0b5f6d;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,.18);
+      transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+
+    .home-button:hover,
+    .print-button:hover {
+      transform: scale(1.08);
+      background: #0b5f6d;
+      color: #fff;
+    }
+
+    .page-watermark {
+      position: absolute;
+      top: 54%;
+      left: 50%;
+      z-index: 1;
+      width: 135mm;
+      height: 135mm;
+      transform: translate(-50%,-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .page-watermark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: .1;
+      mix-blend-mode: multiply;
+    }
+
+    @media screen and (max-width:900px) {
+      body { padding: 0; background: #fff; }
+      .page { width: 100%; min-height: 100vh; box-shadow: none; }
+    }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        background: #fff;
+      }
+
+      body { padding: 0; }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .home-button,
+      .print-button,
+      .loading,
+      .error-panel {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="floating-buttons">
+    <a
+      class="home-button"
+      href="index-participants.html"
+      title="Back"
+      aria-label="Back"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+           fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 .5l7 6V15a1 1 0 0 1-1 1h-4V10H6v6H2a1 1 0 0 1-1-1V6.5l7-6z" />
+      </svg>
+    </a>
+
+    <button
+      class="print-button"
+      type="button"
+      onclick="window.print()"
+      title="Print"
+      aria-label="Print"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+           fill="currentColor" viewBox="0 0 16 16">
+        <path d="M2 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3h-2v4H4v-4H2V7zm3 3v3h6v-3H5zm7-4H4a1 1 0 0 0-1 1v2h1V8h8v1h1V7a1 1 0 0 0-1-1z" />
+        <path d="M5 1h6v3H5V1z" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="loading" class="loading">
+    Loading and verifying participant payment data...
+  </div>
+
+  <div id="errorPanel" class="error-panel hidden">
+    <h1>Receipt Not Available</h1>
+    <p id="errorMessage">The requested participant could not be verified.</p>
+    <a href="index-participants.html">Return to participant verification</a>
+  </div>
+
+  <main id="receiptPage" class="page hidden">
+    <div class="page-watermark">
+      <img
+        src="icvee.png"
+        alt=""
+        onerror="this.style.display='none'"
+      />
+    </div>
+
+    <div class="letter-content">
+      <section id="receiptDate" class="date"></section>
+
+      <section class="receipt-title">
+        Official Participant Payment Receipt
+      </section>
+
+      <section class="body-text">
+        <p>To whom it may concern,</p>
+
+        <p>
+          This document certifies that the conference registration payment for
+          the participant listed below has been received in full by the
+          Organizing Committee.
+        </p>
+
+        <table class="receipt-box" aria-label="Participant payment receipt details">
+          <tr>
+            <td>Receipt Number</td>
+            <td>:</td>
+            <td id="receiptNo"></td>
+          </tr>
+
+          <tr>
+            <td>Participant Name</td>
+            <td>:</td>
+            <td id="participantName"></td>
+          </tr>
+
+          <tr>
+            <td>Event</td>
+            <td>:</td>
+            <td>
+              2026 Ninth International Conference on Vocational Education and Electrical Engineering
+            </td>
+          </tr>
+
+          <tr>
+            <td>Payment Status</td>
+            <td>:</td>
+            <td class="status-paid">PAID IN FULL</td>
+          </tr>
+
+          <tr>
+            <td>Amount</td>
+            <td>:</td>
+            <td id="paymentAmount" class="payment-amount"></td>
+          </tr>
+        </table>
+
+        <p>
+          The payment has been successfully verified. This receipt serves as
+          the official confirmation that the conference registration fee
+          associated with this participant has been settled.
+        </p>
+
+        <p>
+          Please retain this receipt for your records. For further information,
+          please contact the committee at
+          <strong>icvee@unesa.ac.id</strong> or visit
+          <strong>https://icvee.conference.unesa.ac.id/</strong>.
+        </p>
+
+        <p>Thank you for your participation in ICVEE 2026.</p>
+      </section>
+
+      <section class="signature-section">
+        <div>Yours sincerely,</div>
+
+        <div class="signature-space">
+          <img
+            class="signature-image"
+            src="TTD Bu Nur.png"
+            alt="Signature"
+            onerror="this.outerHTML='<div class=&quot;signature-placeholder&quot;>SIGNATURE</div>'"
+          />
+        </div>
+
+        <div><strong>Dr. Nurhayati, S.T., M.T.</strong></div>
+        <div>General Chair of ICVEE 2026</div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const EXCEL_FILE = "participants.xlsx";
+
+    const loading = document.getElementById("loading");
+    const errorPanel = document.getElementById("errorPanel");
+    const errorMessage = document.getElementById("errorMessage");
+    const receiptPage = document.getElementById("receiptPage");
+
+    function normalizeHeader(value) {
+      return String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function getField(record, aliases) {
+      const normalized = {};
+
+      Object.entries(record).forEach(([key, value]) => {
+        normalized[normalizeHeader(key)] = value;
+      });
+
+      for (const alias of aliases) {
+        const key = normalizeHeader(alias);
+
+        if (Object.prototype.hasOwnProperty.call(normalized, key)) {
+          return normalized[key];
+        }
+      }
+
+      return "";
+    }
+
+    function formatAmount(value) {
+      if (typeof value === "number" && Number.isFinite(value)) {
+        return `IDR ${value.toLocaleString("en-US", {
+          maximumFractionDigits: 2
+        })}`;
+      }
+
+      const raw = String(value ?? "").trim();
+      if (!raw) return "";
+
+      const cleaned = raw
+        .replace(/^rp\.?\s*/i, "")
+        .replace(/^idr\s*/i, "")
+        .replace(/\s/g, "");
+
+      if (/^\d{1,3}(?:\.\d{3})+$/.test(cleaned)) {
+        const n = Number(cleaned.replace(/\./g, ""));
+        return `IDR ${n.toLocaleString("en-US")}`;
+      }
+
+      if (/^\d+(?:,\d+)?$/.test(cleaned)) {
+        const n = Number(cleaned.replace(",", "."));
+
+        if (Number.isFinite(n)) {
+          return `IDR ${n.toLocaleString("en-US", {
+            maximumFractionDigits: 2
+          })}`;
+        }
+      }
+
+      return raw;
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value ?? "";
+    }
+
+    function showError(text) {
+      loading.classList.add("hidden");
+      receiptPage.classList.add("hidden");
+      errorMessage.textContent = text;
+      errorPanel.classList.remove("hidden");
+    }
+
+    function formatCurrentDate() {
+      return new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(new Date());
+    }
+
+    async function loadExcel() {
+      const response = await fetch(`${EXCEL_FILE}?v=${Date.now()}`, {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error(`Unable to load ${EXCEL_FILE}`);
+      }
+
+      const buffer = await response.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: "array" });
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      return XLSX.utils.sheet_to_json(firstSheet, {
+        defval: "",
+        raw: true
+      });
+    }
+
+    async function loadReceipt() {
+      const rowParam = new URLSearchParams(window.location.search).get("row");
+
+      if (rowParam === null || rowParam === "") {
+        showError(
+          "No participant record was specified. Please return to the verification page."
+        );
+        return;
+      }
+
+      const rowIndex = Number(rowParam);
+
+      if (!Number.isInteger(rowIndex) || rowIndex < 0) {
+        showError("Invalid participant record.");
+        return;
+      }
+
+      try {
+        const records = await loadExcel();
+
+        if (!records.length) {
+          showError("The participant database is empty.");
+          return;
+        }
+
+        const record = records[rowIndex];
+
+        if (!record) {
+          showError("The participant payment record was not found.");
+          return;
+        }
+
+        const name = getField(record, [
+          "Nama",
+          "Name",
+          "Participant Name"
+        ]);
+
+        const amount = getField(record, [
+          "Jumlah",
+          "Amount",
+          "Payment Amount",
+          "Nominal"
+        ]);
+
+        if (!String(name ?? "").trim()) {
+          showError("The participant name is missing in the database.");
+          return;
+        }
+
+        if (amount === "" || amount === null || amount === undefined) {
+          showError("No payment amount is recorded for this participant.");
+          return;
+        }
+
+        const receiptNumber =
+          `PR-ICVEE-2026-P-${String(rowIndex + 1).padStart(4, "0")}`;
+
+        setText("receiptDate", formatCurrentDate());
+        setText("receiptNo", receiptNumber);
+        setText("participantName", String(name).trim());
+        setText("paymentAmount", formatAmount(amount));
+
+        document.title =
+          `Official Payment Receipt - ${String(name).trim()} - ICVEE 2026`;
+
+        loading.classList.add("hidden");
+        errorPanel.classList.add("hidden");
+        receiptPage.classList.remove("hidden");
+
+      } catch (error) {
+        console.error(error);
+
+        showError(
+          `The participant database could not be loaded. Make sure ${EXCEL_FILE} is in the same folder as this HTML file.`
+        );
+      }
+    }
+
+    loadReceipt();
+  </script>
+</body>
+</html>

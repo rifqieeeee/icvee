@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ICVEE 2026 participant payment verification page" />
+  <link href="logo icvee.png" rel="icon">
+  <title>ICVEE 2026 — Participant Payment</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #233f84;
+      --secondary: #3f63a7;
+      --background: #eef3fb;
+      --text: #1f2937;
+      --muted: #667085;
+      --border: #d8e0ef;
+      --danger: #b42318;
+      --success: #067647;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(63,99,167,.18), transparent 32%),
+        linear-gradient(135deg, #f8faff 0%, var(--background) 100%);
+    }
+
+    .card {
+      width: min(100%, 560px);
+      padding: 40px;
+      border: 1px solid rgba(35,63,132,.14);
+      border-radius: 22px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 20px 55px rgba(35,63,132,.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      background: linear-gradient(135deg,var(--primary),var(--secondary));
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      margin: 0;
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      color: #172554;
+      font-size: clamp(28px,5vw,38px);
+      line-height: 1.12;
+    }
+
+    .description {
+      margin: 0 0 30px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+      padding: 0 16px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(63,99,167,.12);
+    }
+
+    button {
+      width: 100%;
+      height: 50px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg,#067647,#079455);
+      font-size: 15px;
+      font-weight: 800;
+      transition: transform .15s, opacity .15s;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { cursor: wait; opacity: .65; transform: none; }
+
+    .message {
+      min-height: 22px;
+      margin: 12px 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.error { color: var(--danger); }
+    .message.success { color: var(--success); }
+
+    .participant-info {
+      display: none;
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #f8faff;
+    }
+
+    .participant-info.visible { display: block; }
+
+    .participant-name {
+      margin: 0 0 6px;
+      color: #172554;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .participant-amount {
+      margin: 0;
+      color: #067647;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .helper {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid #edf0f6;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width:560px) {
+      body { padding: 16px; }
+      .card { padding: 28px 22px; border-radius: 18px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="brand">
+      <div class="brand-mark">ICVEE</div>
+      <p class="brand-name">
+        2026 Ninth International Conference on Vocational Education and Electrical Engineering
+      </p>
+    </div>
+
+    <h1>Participant Payment Receipt</h1>
+
+    <p class="description">
+      Enter the participant name exactly as registered to verify the payment record
+      and open the official receipt.
+    </p>
+
+    <form id="participantForm" novalidate>
+      <label class="field-label" for="participantNameInput">
+        Participant Name
+      </label>
+
+      <input
+        id="participantNameInput"
+        name="participantName"
+        type="text"
+        autocomplete="name"
+        placeholder="Example: Rifqi Abdillah"
+        aria-describedby="message"
+        required
+      />
+
+      <button id="paymentButton" type="submit">
+        View Payment Receipt
+      </button>
+
+      <div id="participantInfo" class="participant-info">
+        <p id="foundName" class="participant-name"></p>
+        <p id="foundAmount" class="participant-amount"></p>
+      </div>
+
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="helper">
+      Can't find your participant record or noticed incorrect information?
+      Please contact the conference committee via Email at
+      <strong>icvee@unesa.ac.id</strong> for assistance.
+    </div>
+  </main>
+
+  <script>
+    const EXCEL_FILE = "participants.xlsx";
+
+    const form = document.getElementById("participantForm");
+    const input = document.getElementById("participantNameInput");
+    const button = document.getElementById("paymentButton");
+    const message = document.getElementById("message");
+    const participantInfo = document.getElementById("participantInfo");
+    const foundName = document.getElementById("foundName");
+    const foundAmount = document.getElementById("foundAmount");
+
+    function normalizeHeader(value) {
+      return String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function getField(record, aliases) {
+      const normalized = {};
+
+      Object.entries(record).forEach(([key, value]) => {
+        normalized[normalizeHeader(key)] = value;
+      });
+
+      for (const alias of aliases) {
+        const key = normalizeHeader(alias);
+        if (Object.prototype.hasOwnProperty.call(normalized, key)) {
+          return normalized[key];
+        }
+      }
+
+      return "";
+    }
+
+    function normalizeName(value) {
+      return String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+    }
+
+    function formatAmount(value) {
+      if (typeof value === "number" && Number.isFinite(value)) {
+        return `IDR ${value.toLocaleString("en-US", {
+          maximumFractionDigits: 2
+        })}`;
+      }
+
+      const raw = String(value ?? "").trim();
+      if (!raw) return "";
+
+      const cleaned = raw
+        .replace(/^rp\.?\s*/i, "")
+        .replace(/^idr\s*/i, "")
+        .replace(/\s/g, "");
+
+      if (/^\d{1,3}(?:\.\d{3})+$/.test(cleaned)) {
+        const n = Number(cleaned.replace(/\./g, ""));
+        return `IDR ${n.toLocaleString("en-US")}`;
+      }
+
+      if (/^\d+(?:,\d+)?$/.test(cleaned)) {
+        const n = Number(cleaned.replace(",", "."));
+        if (Number.isFinite(n)) {
+          return `IDR ${n.toLocaleString("en-US", {
+            maximumFractionDigits: 2
+          })}`;
+        }
+      }
+
+      return raw;
+    }
+
+    function setMessage(text, type = "") {
+      message.textContent = text;
+      message.className = `message ${type}`.trim();
+    }
+
+    function setLoading(loading) {
+      button.disabled = loading;
+      button.textContent = loading ? "Checking..." : "View Payment Receipt";
+    }
+
+    function hideInfo() {
+      participantInfo.classList.remove("visible");
+      foundName.textContent = "";
+      foundAmount.textContent = "";
+    }
+
+    async function loadExcel() {
+      const response = await fetch(`${EXCEL_FILE}?v=${Date.now()}`, {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error(`Unable to load ${EXCEL_FILE}`);
+      }
+
+      const buffer = await response.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: "array" });
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      return XLSX.utils.sheet_to_json(firstSheet, {
+        defval: "",
+        raw: true
+      });
+    }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const name = input.value.trim();
+      hideInfo();
+
+      if (!name) {
+        setMessage("Please enter the participant name.", "error");
+        input.focus();
+        return;
+      }
+
+      setLoading(true);
+      setMessage("Checking participant payment data...");
+
+      try {
+        const records = await loadExcel();
+
+        if (!records.length) {
+          setMessage("The participant database is empty.", "error");
+          return;
+        }
+
+        const matches = records
+          .map((record, index) => ({
+            record,
+            index,
+            name: getField(record, ["Nama", "Name", "Participant Name"])
+          }))
+          .filter(item =>
+            normalizeName(item.name) === normalizeName(name)
+          );
+
+        if (!matches.length) {
+          setMessage(
+            "The participant name was not found in the payment database.",
+            "error"
+          );
+          return;
+        }
+
+        if (matches.length > 1) {
+          setMessage(
+            "More than one participant has this name. Please contact the committee for verification.",
+            "error"
+          );
+          return;
+        }
+
+        const match = matches[0];
+        const amount = getField(match.record, [
+          "Jumlah",
+          "Amount",
+          "Payment Amount",
+          "Nominal"
+        ]);
+
+        if (amount === "" || amount === null || amount === undefined) {
+          setMessage(
+            "Participant found, but no payment amount is recorded.",
+            "error"
+          );
+          return;
+        }
+
+        foundName.textContent = String(match.name).trim();
+        foundAmount.textContent = `Amount: ${formatAmount(amount)}`;
+        participantInfo.classList.add("visible");
+
+        setMessage(
+          "Payment record verified. Opening the official receipt...",
+          "success"
+        );
+
+        window.location.href =
+          `payment-participants.html?row=${encodeURIComponent(match.index)}`;
+
+      } catch (error) {
+        console.error(error);
+        setMessage(
+          `The participant database could not be loaded. Make sure ${EXCEL_FILE} is available in the same folder.`,
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
