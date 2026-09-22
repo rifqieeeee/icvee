@@ -159,6 +159,21 @@
         );
     }
 
+    #authorButton {
+      width: 100%;
+      background: linear-gradient(135deg, #b45309, #d97706);
+    }
+
+    .author-button-wrap { margin-top: 12px; }
+    .author-picker { margin-top: 18px; }
+    .author-picker[hidden] { display: none; }
+    .author-picker select {
+      width: 100%; height: 50px; padding: 0 14px;
+      border: 1px solid var(--border); border-radius: 12px;
+      background: #fff; font-size: 15px;
+    }
+    #openAuthorButton { width: 100%; margin-top: 12px; }
+
     .action-buttons{
         display:flex;
         gap:12px;
@@ -293,6 +308,16 @@
           </button>
       </div>
 
+      <div class="author-button-wrap">
+        <button id="authorButton" type="submit" name="documentType" value="author">Author Certificate</button>
+      </div>
+
+      <div id="authorPicker" class="author-picker" hidden>
+        <label class="field-label" for="authorSelect">Select author</label>
+        <select id="authorSelect" required></select>
+        <button id="openAuthorButton" type="button">View Author Certificate</button>
+      </div>
+
       <p id="message"
         class="message"
         role="status"
@@ -319,7 +344,20 @@
   const loaButton = document.getElementById('loaButton');
   const paymentButton = document.getElementById('paymentButton');
   const presenterButton = document.getElementById('presenterButton');
+  const authorButton = document.getElementById('authorButton');
+  const authorPicker = document.getElementById('authorPicker');
+  const authorSelect = document.getElementById('authorSelect');
+  const openAuthorButton = document.getElementById('openAuthorButton');
   const message = document.getElementById('message');
+  let verifiedAuthorId = '';
+  input.addEventListener('input', () => {
+    authorPicker.hidden = true;
+    verifiedAuthorId = '';
+  });
+  openAuthorButton.addEventListener('click', () => {
+    if (!verifiedAuthorId || !authorSelect.value) return;
+    window.location.href = `author.html?id=${encodeURIComponent(verifiedAuthorId)}&author=${encodeURIComponent(authorSelect.value)}`;
+  });
 
   function parseCSV(text) {
     const rows = [];
@@ -405,6 +443,7 @@
     loaButton.disabled = isLoading;
     paymentButton.disabled = isLoading;
     presenterButton.disabled = isLoading;
+    authorButton.disabled = isLoading;
 
     if (isLoading && selectedType === 'loa') {
       loaButton.textContent = 'Checking...';
@@ -423,6 +462,7 @@
     } else {
         presenterButton.textContent = 'Presenter Certificate';
     }
+    authorButton.textContent = isLoading && selectedType === 'author' ? 'Checking...' : 'Author Certificate';
   }
 
   form.addEventListener('submit', async event => {
@@ -431,6 +471,8 @@
     const clickedButton = event.submitter;
     const documentType = clickedButton?.value;
     const manuscriptId = input.value.trim();
+    authorPicker.hidden = true;
+    verifiedAuthorId = '';
 
     if (!manuscriptId) {
       setMessage('Please enter your Manuscript ID.', 'error');
@@ -543,6 +585,26 @@
               `presenter.html?id=${encodeURIComponent(manuscriptId)}`;
 
           return;
+      }
+
+      if (documentType === 'author') {
+        const authors = String(record.authors || '').split(';').map(name => name.trim()).filter(Boolean);
+        if (!authors.length) {
+          setMessage('No authors are registered for this manuscript.', 'error');
+          return;
+        }
+        authorSelect.replaceChildren();
+        for (const [index, name] of authors.entries()) {
+          const option = document.createElement('option');
+          option.value = String(index);
+          option.textContent = name;
+          authorSelect.append(option);
+        }
+        verifiedAuthorId = manuscriptId;
+        authorPicker.hidden = false;
+        setMessage('Manuscript verified. Select the author whose certificate you want to view.', 'success');
+        authorSelect.focus();
+        return;
       }
 
     } catch (error) {
